@@ -24,7 +24,7 @@ def test_ticket_to_ride_rules():
 
 
 def query_and_validate(question: str, expected_response: str):
-    response_text = query_rag(question)
+    response_text = query_rag(question,'mistral','nomic-embed-text')
     prompt = EVAL_PROMPT.format(
         expected_response=expected_response, actual_response=response_text
     )

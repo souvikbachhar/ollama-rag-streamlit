@@ -19,5 +19,5 @@ submit = st.button("Search")
 ## Final response
 if submit:
     start_time = time.time()
-    st.write(query_rag(input_text))
-    st.success('\nResponded in '+str(math.ceil(time.time() - start_time)) + ' seconds')
+    st.write(query_rag(input_text,'mistral','nomic-embed-text'))
+    st.success('Responded in '+str(math.ceil(time.time() - start_time)) + ' seconds')

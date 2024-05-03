@@ -24,12 +24,12 @@ def main():
     parser.add_argument("query_text", type=str, help="The query text.")
     args = parser.parse_args()
     query_text = args.query_text
-    query_rag(query_text)
+    query_rag(query_text,'mistral','nomic-embed-text')
 
 
-def query_rag(query_text: str):
+def query_rag(query_text: str, llm_model: str, embed_model: str):
     # Prepare the DB.
-    embedding_function = get_embedding_function()
+    embedding_function = get_embedding_function(embed_model)
     db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function)
 
     # Search the DB.
@@ -40,7 +40,7 @@ def query_rag(query_text: str):
     prompt = prompt_template.format(context=context_text, question=query_text)
     # print(prompt)
 
-    model = Ollama(model="mistral")
+    model = Ollama(model=llm_model)
     response_text = model.invoke(prompt)
 
     sources = [doc.metadata.get("id", None) for doc, _score in results]
