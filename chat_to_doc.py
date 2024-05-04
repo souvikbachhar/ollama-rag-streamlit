@@ -23,15 +23,15 @@ st.set_page_config(page_title="Chat with Docs",
                    initial_sidebar_state='expanded')
 st.title("Hello Human...!!!")
 with st.sidebar:
-    "[Available Embedding models](https://python.langchain.com/docs/integrations/text_embedding/)"
-    "[Available LLM models](https://github.com/ollama/ollama?tab=readme-ov-file#quickstart)"
-    st.markdown("""---""")
     selected_embed_model = st.sidebar.selectbox('Choose embedding model', ['nomic-embed-text'], key='selected_embed_model')
     selected_llm_model = st.sidebar.selectbox('Choose LLM model', ['mistral','gemma:2b'], key='selected_llm_model')
     uploaded_files = st.file_uploader("Choose a file", accept_multiple_files=True)
     for uploaded_file in uploaded_files:
         bytes_data = uploaded_file.read()
         st.write("filename:", uploaded_file.name)
+    st.markdown("""---""")
+    "[Available Embedding models](https://python.langchain.com/docs/integrations/text_embedding/)"
+    "[Available LLM models](https://github.com/ollama/ollama?tab=readme-ov-file#quickstart)"
 # Initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
