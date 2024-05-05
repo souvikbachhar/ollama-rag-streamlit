@@ -7,13 +7,11 @@ from langchain.schema.document import Document
 from get_embedding_function import get_embedding_function
 from langchain.vectorstores.chroma import Chroma
 
-
 CHROMA_PATH = "chroma"
 DATA_PATH = "data"
 
 
 def main():
-
     # Check if the database should be cleared (using the --clear flag).
     parser = argparse.ArgumentParser()
     parser.add_argument("--reset", action="store_true", help="Reset the database.")
@@ -25,7 +23,7 @@ def main():
     # Create (or update) the data store.
     documents = load_documents()
     chunks = split_documents(documents)
-    add_to_chroma(chunks,"nomic-embed-text")
+    add_to_chroma(chunks, "nomic-embed-text")
 
 
 def load_documents():
@@ -43,7 +41,7 @@ def split_documents(documents: list[Document]):
     return text_splitter.split_documents(documents)
 
 
-def add_to_chroma(chunks: list[Document],embed_model:str):
+def add_to_chroma(chunks: list[Document], embed_model: str):
     # Load the existing database.
     db = Chroma(
         persist_directory=CHROMA_PATH, embedding_function=get_embedding_function(embed_model)
@@ -73,7 +71,6 @@ def add_to_chroma(chunks: list[Document],embed_model:str):
 
 
 def calculate_chunk_ids(chunks):
-
     # This will create IDs like "data/monopoly.pdf:6:2"
     # Page Source : Page Number : Chunk Index
 
@@ -104,6 +101,12 @@ def calculate_chunk_ids(chunks):
 def clear_database():
     if os.path.exists(CHROMA_PATH):
         shutil.rmtree(CHROMA_PATH)
+
+
+def load_documents_to_database():
+    documents = load_documents()
+    chunks = split_documents(documents)
+    add_to_chroma(chunks, "nomic-embed-text")
 
 
 if __name__ == "__main__":

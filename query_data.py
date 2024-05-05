@@ -45,7 +45,7 @@ def query_rag(query_text: str, llm_model: str, embed_model: str):
 
     sources = [doc.metadata.get("id", None) for doc, _score in results]
     formatted_response = f"Response: {response_text}\nSources: {sources}"
-    print(formatted_response)
+    #print(formatted_response)
     return response_text
 
 
