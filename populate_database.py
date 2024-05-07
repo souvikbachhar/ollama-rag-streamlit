@@ -2,6 +2,7 @@ import argparse
 import os
 import shutil
 from langchain.document_loaders.pdf import PyPDFDirectoryLoader
+from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain.schema.document import Document
 from get_embedding_function import get_embedding_function
@@ -9,7 +10,7 @@ from langchain.vectorstores.chroma import Chroma
 
 CHROMA_PATH = "chroma"
 DATA_PATH = "data"
-
+CACHE_DATA_PATH = "cache"
 
 def main():
     # Check if the database should be cleared (using the --clear flag).
@@ -21,13 +22,18 @@ def main():
         clear_database()
 
     # Create (or update) the data store.
-    documents = load_documents()
+    documents = load_documents_from_directory()
     chunks = split_documents(documents)
     add_to_chroma(chunks, "nomic-embed-text")
 
 
-def load_documents():
-    document_loader = PyPDFDirectoryLoader(DATA_PATH)
+def load_documents_from_directory():
+    document_loader = PyPDFDirectoryLoader(CACHE_DATA_PATH)
+    return document_loader.load()
+
+
+def load_documents(path: str):
+    document_loader = PyPDFLoader(path)
     return document_loader.load()
 
 
@@ -92,6 +98,7 @@ def calculate_chunk_ids(chunks):
         chunk_id = f"{current_page_id}:{current_chunk_index}"
         last_page_id = current_page_id
 
+
         # Add it to the page meta-data.
         chunk.metadata["id"] = chunk_id
 
@@ -100,11 +107,11 @@ def calculate_chunk_ids(chunks):
 
 def clear_database():
     if os.path.exists(CHROMA_PATH):
-        shutil.rmtree(CHROMA_PATH)
+        os.remove(CHROMA_PATH)
 
 
 def load_documents_to_database():
-    documents = load_documents()
+    documents = load_documents_from_directory()
     chunks = split_documents(documents)
     add_to_chroma(chunks, "nomic-embed-text")
 

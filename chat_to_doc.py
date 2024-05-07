@@ -1,11 +1,16 @@
+import glob
 import math
+import os
+import shutil
+
 import streamlit as st
 import time
 
-from populate_database import clear_database, load_documents_to_database
+from populate_database import clear_database, load_documents_to_database, load_documents
 from query_data import query_rag
 from util import log_with_toast
 
+CACHE_DATA_FULL_PATH = os.getcwd()+"\cache"
 
 # Streamed response emulator
 def response_generator(prompt):
@@ -19,25 +24,33 @@ def response_generator(prompt):
         time.sleep(0.05)
     log_with_toast(start_time)
 
+
 st.set_page_config(page_title="Chat with Docs",
                    page_icon='🤖',
                    layout='centered',
                    initial_sidebar_state='expanded')
 st.title("Hello Human...!!!")
 with st.sidebar:
-    selected_embed_model = st.sidebar.selectbox('Choose embedding model', ['nomic-embed-text'], key='selected_embed_model')
-    selected_llm_model = st.sidebar.selectbox('Choose LLM model', ['mistral', 'llama3', 'gemma:2b'], key='selected_llm_model')
+    selected_embed_model = st.sidebar.selectbox('Choose embedding model', ['nomic-embed-text'],
+                                                key='selected_embed_model')
+    selected_llm_model = st.sidebar.selectbox('Choose LLM model', ['mistral', 'llama3', 'gemma:2b'],
+                                              key='selected_llm_model')
     uploaded_files = st.file_uploader("Choose a file", accept_multiple_files=True)
-    for uploaded_file in uploaded_files:
-        bytes_data = uploaded_file.read()
-        st.write("filename:", uploaded_file.name)
 
     col1, col2 = st.columns([5, 5])
     with col1:
         if st.button("Upload and Train", type="secondary"):
             with st.spinner('Training...⏳'):
                 start_time = time.time()
+                for uploaded_file in uploaded_files:
+                    path = os.path.join(CACHE_DATA_FULL_PATH, uploaded_file.name)
+                    with open(path, "wb") as f:
+                        f.write(uploaded_file.getvalue())
+
                 load_documents_to_database()
+
+                for filename in os.listdir(CACHE_DATA_FULL_PATH):
+                    os.remove(os.path.join(CACHE_DATA_FULL_PATH, filename))
                 log_with_toast(start_time)
     with col2:
         if st.button("Reset DB", type="primary"):
