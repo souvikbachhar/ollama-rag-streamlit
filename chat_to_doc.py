@@ -61,7 +61,7 @@ with st.sidebar:
 
     st.markdown("""---""")
     "[Available Embedding models](https://python.langchain.com/docs/integrations/text_embedding/)"
-    "[Available LLM models](https://github.com/ollama/ollama?tab=readme-ov-file#quickstart)"
+    "[Available LLM models](https://ollama.com/library)"
 # Initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
