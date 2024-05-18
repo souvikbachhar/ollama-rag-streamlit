@@ -33,7 +33,7 @@ st.title("Hello Human...!!!")
 with st.sidebar:
     selected_embed_model = st.sidebar.selectbox('Choose embedding model', ['nomic-embed-text'],
                                                 key='selected_embed_model')
-    selected_llm_model = st.sidebar.selectbox('Choose LLM model', ['mistral', 'llama3', 'gemma:2b'],
+    selected_llm_model = st.sidebar.selectbox('Choose LLM model', [ 'llama3','mistral', 'gemma:2b'],
                                               key='selected_llm_model')
     uploaded_files = st.file_uploader("Choose a file", accept_multiple_files=True)
 
