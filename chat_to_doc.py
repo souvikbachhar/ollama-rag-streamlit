@@ -10,7 +10,8 @@ from populate_database import clear_database, load_documents_to_database, load_d
 from query_data import query_rag
 from util import log_with_toast
 
-CACHE_DATA_FULL_PATH = os.getcwd()+"\cache"
+#CACHE_DATA_FULL_PATH = os.getcwd()+"\cache" #windows
+CACHE_DATA_FULL_PATH = os.getcwd()+"/cache" #linux
 
 # Streamed response emulator
 def response_generator(prompt):
