@@ -4,3 +4,4 @@ chromadb # Vector storage
 pytest
 streamlit
 langchain-community
+pysqlite3-binary
