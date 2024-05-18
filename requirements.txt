@@ -3,3 +3,4 @@ langchain
 chromadb # Vector storage
 pytest
 streamlit
+langchain-community
