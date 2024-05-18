@@ -12,7 +12,11 @@ Download the models you want to use in your app: <br/>
 Ex : ollama pull llama3 <br/>
      ollama pull nomic-embed-text <br/>
      <br/>
+
+# How to use
 pip install -r requirements.txt  <br/>
+
+streamlit run chat_to_doc.py
 
 From the Dopdown on the left, you can choose which model to embed and which model to use for LLM
 
